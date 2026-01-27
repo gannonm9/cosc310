@@ -1,7 +1,7 @@
 package review;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
     Map<String, Integer> m = new HashMap<>();

@@ -1,8 +1,8 @@
 package chapter6;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -43,6 +43,7 @@ public class ArrayVsArrayListLab {
         tests[0] = new ArrayRandom(arr, list, "array,random_access");
         tests[1] = new ListRandom(arr, list, "arraylist, random_access");
         tests[2] = new ArrayAppend(arr, list, "array,append");
+        tests[3] = new ArrayInsert(arr, list, "array,insert");
         
         for (Target target : tests) {
             if (target != null) {
