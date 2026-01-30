@@ -43,4 +43,13 @@ abstract public class Target {
         }
     }
     
+    // returns average time in milliseconds
+    public double getAverageMs() {
+        long total = 0;
+        for (int i = 0; i < TRIALS; i++) {
+            total += results[i];
+        }
+        return total / (double) TRIALS / 1_000_000.0;  // convert ns to ms
+    }
+    
 }
