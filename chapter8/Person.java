@@ -2,7 +2,7 @@ package chapter8;
 // abstract forces other parts of our program to create a specfiic type of person whenever the construct a person
 abstract public class Person {
 
-    protected String name;
+    String name;
     protected String ID;
     protected String addr;
     protected String email;
@@ -14,7 +14,7 @@ abstract public class Person {
         this.email = email;
     }
 
-
+abstract public String getType();
 
 
     public String getName() {
