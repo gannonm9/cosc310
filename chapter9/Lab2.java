@@ -2,16 +2,6 @@ package chapter9;
 
 public class Lab2 {
 
-    public static void runQueueTests(Queue<String> queue, String whichQueue) throws Exception {
-        System.out.println(queue);
- queue.enqueue("BHM");
- queue.enqueue("ATL");
- queue.enqueue("MSP");
-    System.out.println(queue.dequeue());
-    System.out.println(queue.size());
-
-    }
-
     public static void runStackTests(Stack<String> stack, String whichStack) throws Exception {
         System.out.println(stack);
         stack.push("BHM");
@@ -31,15 +21,23 @@ public class Lab2 {
         stack.pop();
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void runQueueTests(Queue<String> queue, String whichQueue) throws Exception {
+        System.out.println("Start of test on: " + whichQueue);
+        queue.enqueue("BHM");
+        queue.enqueue("ATL");
+        queue.enqueue("MSP");
+        System.out.println(queue.dequeue());
+        System.out.println(queue.size());
+    }
+
+    public static void main(String[] args) throws Exception {
         Stack<String> stack1 = new ArrayStack<>();
         Stack<String> stack2 = new ListStack<>();
         runStackTests(stack1, "ArrayStack");
         runStackTests(stack2, "ListStack");
 
         Queue<String> queue1 = new ArrayQueue<>();
-        runQueueTests(queue1, "ArrayQueue");
-
+        runQueueTests(queue1, "Array Queue");
     }
 
 
