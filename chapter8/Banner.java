@@ -1,10 +1,7 @@
+package chapter8;
 
 
 
-import chapter8.Faculty;
-import chapter8.Person;
-import chapter8.Staff;
-import chapter8.Student;
 import java.util.ArrayList;
 
 public class Banner {
