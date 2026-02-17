@@ -17,8 +17,8 @@ public class DLinkedListQueue<T> implements Queue<T> {
 
     @Override
     public T dequeue() throws Exception {
+        // TODO (dequeue from head using removeFirst())
         return list.removeFirst().getData();
-
     }
 
     @Override

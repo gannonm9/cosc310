@@ -23,21 +23,21 @@ public class ArrayListQueue<T> implements Queue<T> {
         ensureCapacity();
         buffer.set(tail, item);
         size++;
-        tail = (tail +1) % buffer.size();
+        tail = (tail + 1) % buffer.size();
     }
 
     @Override
     public T dequeue() throws Exception {
+        // TODO - check for empty queue
         T item = buffer.get(head);
-        size --;
+        size--;
         head = (head + 1) % buffer.size();
         return item;
-        
     }
 
     @Override
     public T front() throws Exception {
-        
+        // TODO
         return null;
     }
 
@@ -56,16 +56,14 @@ public class ArrayListQueue<T> implements Queue<T> {
         if (size < buffer.size())
             return;
 
-
+        // resize and recenter
         int oldcap = buffer.size();
-
-        ArrayList<T> biggerBuffer = new ArrayList<>(buffer.size() * 2);
-        for (int i = 0; i < oldcap; i++) {
-            biggerBuffer.set(i, buffer.get(head));
-            head = (head + 1) % buffer.size();
-        
+        ArrayList<T> bigbuffer = new ArrayList<>(buffer.size()*2);
+        for (int i=0; i<oldcap; i++) {
+            bigbuffer.set(i, buffer.get(head));
+            head = (head + 1) % oldcap;
         }
-        buffer = biggerBuffer;
+        buffer = bigbuffer; // the "old" swaperoo trick
         tail = oldcap;
     }
 }
