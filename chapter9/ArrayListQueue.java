@@ -20,18 +20,24 @@ public class ArrayListQueue<T> implements Queue<T> {
 
     @Override
     public void enqueue(T item) {
-        // TODO
+        ensureCapacity();
+        buffer.set(tail, item);
+        size++;
+        tail = (tail +1) % buffer.size();
     }
 
     @Override
     public T dequeue() throws Exception {
-        // TODO
-        return null;
+        T item = buffer.get(head);
+        size --;
+        head = (head + 1) % buffer.size();
+        return item;
+        
     }
 
     @Override
     public T front() throws Exception {
-        // TODO
+        
         return null;
     }
 
@@ -45,7 +51,21 @@ public class ArrayListQueue<T> implements Queue<T> {
         return size == 0;
     }
 
-    private void ensureCapacity(int needed) {
+    private void ensureCapacity() {
         // TODO: if needed > buffer.size(), double capacity and re-center head at 0
+        if (size < buffer.size())
+            return;
+
+
+        int oldcap = buffer.size();
+
+        ArrayList<T> biggerBuffer = new ArrayList<>(buffer.size() * 2);
+        for (int i = 0; i < oldcap; i++) {
+            biggerBuffer.set(i, buffer.get(head));
+            head = (head + 1) % buffer.size();
+        
+        }
+        buffer = biggerBuffer;
+        tail = oldcap;
     }
 }
