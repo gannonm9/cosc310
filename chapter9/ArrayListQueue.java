@@ -28,16 +28,19 @@ public class ArrayListQueue<T> implements Queue<T> {
 
     @Override
     public T dequeue() throws Exception {
-        // TODO - check for empty queue
+        if (isEmpty())
+            throw new Exception("Queue is empty");
         T item = buffer.get(head);
-        size--;
+        buffer.set(head, null);
         head = (head + 1) % buffer.size();
+        size--;
         return item;
     }
 
     @Override
     public T front() throws Exception {
-        // TODO
+        if (isEmpty())
+            throw new Exception("Queue is empty");
         return buffer.get(head);
     }
 
@@ -52,22 +55,21 @@ public class ArrayListQueue<T> implements Queue<T> {
     }
 
     private void ensureCapacity() {
-        // TODO: if needed > buffer.size(), double capacity and re-center head at 0
+        // if there's still capacity, do nothing
         if (size < buffer.size())
             return;
 
-        // resize and recenter
         int oldcap = buffer.size();
-        ArrayList<T> bigbuffer = new ArrayList<>(oldcap*2);
-        for (int i = 0; i < oldcap*2; i++) {
-            bigbuffer.add(null);    
+        ArrayList<T> bigbuffer = new ArrayList<>(oldcap * 2);
+        for (int i = 0; i < oldcap * 2; i++) {
+            bigbuffer.add(null);
         }
-        for (int i=0; i<oldcap; i++) {
-            bigbuffer.set(i,buffer.get(head));
-            head = (head + 1) % oldcap;
+        // copy elements in order starting from head
+        for (int i = 0; i < oldcap; i++) {
+            bigbuffer.set(i, buffer.get((head + i) % oldcap));
         }
-        buffer = bigbuffer; // the "old" swaperoo trick
+        buffer = bigbuffer;
         head = 0;
-        tail = oldcap;
+        tail = size; // next insertion position
     }
 }

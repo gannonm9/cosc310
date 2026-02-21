@@ -1,7 +1,6 @@
 package chapter9;
 
 import my.util.DLinkedList;
-import my.util.DNode;
 
 public class SortedDLinkedListPriorityQueue<T> implements PriorityQueue<T> {
 
@@ -36,9 +35,9 @@ public class SortedDLinkedListPriorityQueue<T> implements PriorityQueue<T> {
         // Algorithm: make sure first item in DLInkedList is always highest priority
         // Start with first item and traverse the list until you get to a higher priority item
         // Insert the new item before the one you just found
-        DNode<Entry<T>> curr = list.get(0);
-        while (curr!=null) {
-            if (priority<curr.getData().priority) {
+        my.util.DNode<Entry<T>> curr = list.get(0);
+        while (curr != null) {
+            if (priority < curr.getData().priority) {
                 list.addBefore(curr, newentry);
                 return;
             }
@@ -46,22 +45,28 @@ public class SortedDLinkedListPriorityQueue<T> implements PriorityQueue<T> {
         }
 
         // if you get to the end of the list, add it at the end
-        if (curr==null) {
-            list.add(newentry); 
-        }
+        list.add(newentry);
 
     }
 
     @Override
     public T dequeue() throws Exception {
-        // TODO: removeFirst()
-        return list.removeFirst().getData().data;
+        if (isEmpty())
+            throw new Exception("PriorityQueue is empty");
+        my.util.DNode<Entry<T>> n = list.removeFirst();
+        if (n == null)
+            throw new Exception("PriorityQueue is empty");
+        return n.getData().data;
     }
 
     @Override
     public T front() throws Exception {
-        // TODO: peek head
-        return list.get(0).getData().data;
+        if (isEmpty())
+            throw new Exception("PriorityQueue is empty");
+        my.util.DNode<Entry<T>> n = list.get(0);
+        if (n == null)
+            throw new Exception("PriorityQueue is empty");
+        return n.getData().data;
     }
 
     @Override
