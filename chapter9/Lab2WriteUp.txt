@@ -1,0 +1,21 @@
+  Results:
+  Workload1 bulk enq+deq (uniform priorities)  median:     116.95 ns/op   checksum: 449985000
+  Workload2 mixed steady-state (uniform priorities)  median:     106.78 ns/op   checksum: -106337492798
+  Workload3 skewed priorities (bulk)      median:     103.04 ns/op   checksum: 449985000
+
+
+
+
+
+
+
+Array-based structures and heaps usually run much faster in practice. Stacks/queues are O(1) (ArrayList amortized O(1)), heaps are O(log n), and inserting into sorted arrays or lists is O(n).
+Arrays store data contiguously so they use the CPU cache well, while linked lists jump around memory and cause slow cache misses.
+Sorted ArrayList inserts require shifting many elements but those shifts are contiguous.
+Sorted linked lists pay the cost of traversal. For fair benchmarking use warmups, checksums, and medians, and explain timings by combining Big‑O with cache and workload effects.
+
+
+Heaps usually win for large N because inserts/removes are O(log n) with small constants and operate on a contiguous array. 
+Sorted arrays/lists need O(n) work to insert, so costs grow linearly and become expensive as N grows.
+A sorted array can sometimes compete for small N or when inserts are rare because shifts are contiguous memory moves and are fast in practice.
+Skewed priorities with mostly peeks/removes can make sorted structures look better, but for frequent mixed insert/remove patterns heaps are generally superior.
