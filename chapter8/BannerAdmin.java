@@ -7,6 +7,7 @@ public class BannerAdmin extends Person {
     }
 
     
+    @Override
     public String getType() {
         return "BannerAdmin"; // + name; (error because of default access instead of protected access)
     }
