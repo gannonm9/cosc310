@@ -49,5 +49,9 @@ abstract public String getType();
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return getType() + ": " + getName();
+    }
 
 }
