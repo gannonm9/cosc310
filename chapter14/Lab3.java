@@ -45,7 +45,6 @@ public class Lab3 {
         List<BikeDataRecord> sortedByTime = Sorting.mergeSort(records);
         
         // Define 12-2 PM time windows (2 hours = 7200 seconds) for each day
-        // Using Garmin timestamps - each day is approximately 86400 seconds apart
         long[][] timeWindows = {
             {1141920754L, 1141927954L},                           // Day 1: 12-2 PM window
             {1141920754L + 86400, 1141927954L + 86400},          // Day 2: 12-2 PM window
