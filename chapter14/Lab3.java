@@ -2,7 +2,6 @@ package chapter14;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import json.*;
 
 public class Lab3 {
@@ -17,54 +16,63 @@ public class Lab3 {
         records.addAll(records3);
         records.addAll(records4);
 
-        // sort by speed ... new, easier way to sort ... but note that it is mutative (i.e., it modifies the original list)
-        records.sort((r1, r2)->Float.compare(r2.getSpeed(),r1.getSpeed()));
-        List<BikeDataRecord> highspeedsonly = records.stream().filter((r)->r.getSpeed()>16.0f).toList();
-        int hrtotal1 = highspeedsonly.stream().map((r)->r.getHeartrate()).reduce(0,Integer::sum);
-        System.out.println(highspeedsonly.size());
-        System.out.println(hrtotal1/highspeedsonly.size());
+        
+        System.out.println("Question 1 Results:");
+        
+        // Sort all records by power (sortCriteria = 7) using Merge Sort
+        BikeDataRecord.sortCriteria = 7; 
+        List<BikeDataRecord> sortedByPower = Sorting.mergeSort(records);
+        
+        //get the last 15 for highest power
+        List<BikeDataRecord> top15Power = sortedByPower.subList(sortedByPower.size() - 15, sortedByPower.size());
+        
+        // Reverse to display highest power first
+        java.util.Collections.reverse(top15Power);
+        
+        System.out.println("Top 15 Riding Records with Highest Power Output:");
+        int rank = 1;
+        for (BikeDataRecord record : top15Power) {
+            System.out.printf("%2d. Power: %4dW | Speed: %5.2f m/s | HR: %3d bpm | Timestamp: %d%n", 
+                rank, record.getPow(), record.getSpeed(), record.getHeartrate(), record.getTimestamp());
+            rank++;
+        }
 
-        // filter by range (look at the filter function that uses a min timestamp and a max timestamp) 
-        List<BikeDataRecord> susphrdata = records.stream().filter((r)->r.getTimestamp()>=1142088651&&r.getTimestamp()<=1142088671).toList();
-        ArrayList<BikeDataRecord> newlist = new ArrayList<>(susphrdata);
-        // now that we have only the matching records, we can sort them by timestamp using the new, easier way to sort
-        newlist.sort((r1,r2)->Long.compare(r1.getTimestamp(),r2.getTimestamp()));
-        for (BikeDataRecord bikeDataRecord : newlist) {
-            System.out.println(bikeDataRecord);
+        
+        System.out.println("Question 2 Results:");
+        
+        // Sort by timestamp for binary search (sortCriteria = 0)
+        BikeDataRecord.sortCriteria = 0; // 0 = timestamp
+        List<BikeDataRecord> sortedByTime = Sorting.mergeSort(records);
+        
+        // Define 12-2 PM time windows (2 hours = 7200 seconds) for each day
+        // Using Garmin timestamps - each day is approximately 86400 seconds apart
+        long[][] timeWindows = {
+            {1141920754L, 1141927954L},                           // Day 1: 12-2 PM window
+            {1141920754L + 86400, 1141927954L + 86400},          // Day 2: 12-2 PM window
+            {1141920754L + 172800, 1141927954L + 172800},        // Day 3: 12-2 PM window
+            {1141920754L + 259200, 1141927954L + 259200}         // Day 4: 12-2 PM window
+        };
+        String[] dayNames = {"Day 1", "Day 2", "Day 3", "Day 4"};
+        
+        int totalHighHRCount = 0;
+        for (int d = 0; d < timeWindows.length; d++) {
+            //find all records in the 12-2 PM time window
+            ArrayList<BikeDataRecord> windowRecords = Searching.binarySearch(
+                (ArrayList<BikeDataRecord>) sortedByTime,
+                timeWindows[d][0],
+                timeWindows[d][1]
+            );
+            
+           //heart rate > 110 bpm
+            List<BikeDataRecord> highHRRecords = windowRecords.stream()
+                .filter(r -> r.getHeartrate() > 110)
+                .toList();
+            
+            System.out.printf("%s: %d records with HR > 110 bpm%n", dayNames[d], highHRRecords.size());
+            totalHighHRCount += highHRRecords.size();
         }
         
-        // old way of sorting using our own merge sort implementation and the sortCriteria static variable
-        BikeDataRecord.sortCriteria = 0;
-        List<BikeDataRecord> sortedRecords = Sorting.mergeSort(records);
-        System.out.println(sortedRecords.get(0));
-        System.out.println(sortedRecords.get(1));
-        System.out.println(sortedRecords.get(2));
-        System.out.println("...");
-        int count = 0;
-        for (BikeDataRecord bikeDataRecord : sortedRecords) {
-            if (bikeDataRecord.getHeartrate()>0) {
-                System.out.println(bikeDataRecord);
-                count++;
-            }
-            if (count>10)
-                break;
-        }
-
-        // using map to extract single piece of data from each record and then reduce to combine it into a single value (i.e., the total)
-        ArrayList<BikeDataRecord> lunchday1  = Searching.binarySearch((ArrayList<BikeDataRecord>)sortedRecords, 1141920754L, 1141923454L);
-        System.out.println(lunchday1.size());
-        int hrtotal = lunchday1.stream().map(BikeDataRecord::getHeartrate).reduce(0, Integer::sum);
-        int hravg = hrtotal/lunchday1.size();
-        System.out.println(hravg);
-
-        // using map to extract single piece of data from each record and then reduce to combine it into a single value (i.e., the total)
-        ArrayList<BikeDataRecord> lunchday3  = Searching.binarySearch((ArrayList<BikeDataRecord>)sortedRecords, 1141920754L+72800, 1141923454L+72800);
-        System.out.println(lunchday3.size());
-        int hrtotal3 = lunchday3.stream().map(r -> r.getHeartrate()).reduce(0, Integer::sum);
-        int hravg3 = hrtotal3/lunchday3.size();
-        System.out.println(hravg3);
-        int[][] radarArrayTest = new int[][] { new int[] {10, 3}, new int[] {20, 6, 7, 8, 9}, new int[] { 50, 10} };
-        System.out.println(radarArrayTest[1].length);
+        System.out.printf("\nTotal across all 4 days: %d times HR exceeded 110 bpm%n", totalHighHRCount);
 
     }
 }

@@ -1,7 +1,6 @@
 package json;
 
 import java.util.Iterator;
-
 import org.json.JSONArray;
 
 public class BikeDataRecord implements Comparable<BikeDataRecord> {
@@ -36,11 +35,13 @@ public class BikeDataRecord implements Comparable<BikeDataRecord> {
         timestamp = Long.parseLong(recjson.getString(0));
         distance = Float.parseFloat(recjson.getString(1));
         heartrate = Integer.parseInt(recjson.getString(2));
-
-        // you need to do indices 3-9, except for 4 which is already done for you below!
         speed = Float.parseFloat(recjson.getString(3));
         alt = Float.parseFloat(recjson.getString(4));
-
+        lat = Float.parseFloat(recjson.getString(5));
+        lng = Float.parseFloat(recjson.getString(6));
+        pow = Integer.parseInt(recjson.getString(7));
+        cad = Integer.parseInt(recjson.getString(8));
+        degC = Float.parseFloat(recjson.getString(9));
 
         // now let's parse in the vehicle data (from the radar array)
         JSONArray jsonRadarArray = recjson.getJSONArray(10);
